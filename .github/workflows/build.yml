@@ -1,0 +1,235 @@
+name: Build Node
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "NODE_VERSION"
+      - "builders/**"
+      - ".github/workflows/build.yml"
+
+jobs:
+  version_reader:
+    name: Get version number
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.got_version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: got_version
+        run: |
+          cd $GITHUB_WORKSPACE
+          echo "::set-output name=version::$(<./NODE_VERSION)"
+
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos
+            platform_name: macOS
+            os: macos-latest
+            arch: arm64
+            arch_name: ARM64
+            scheme: release
+            scheme_name: Release
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+          - platform: macos
+            platform_name: macOS
+            os: macos-latest
+            arch: x64
+            arch_name: x86-64
+            scheme: release
+            scheme_name: Release
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+          - platform: macos
+            platform_name: macOS
+            os: macos-latest
+            arch: arm64
+            arch_name: ARM64
+            scheme: debug
+            scheme_name: Debug
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+          - platform: linux
+            platform_name: Linux
+            os: ubuntu-latest
+            arch: arm64
+            arch_name: ARM64
+            scheme: release
+            scheme_name: Release
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+          - platform: linux
+            platform_name: Linux
+            os: ubuntu-latest
+            arch: x64
+            arch_name: x86-64
+            scheme: release
+            scheme_name: Release
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+          - platform: android
+            platform_name: Android
+            os: ubuntu-latest
+            arch: arm64
+            arch_name: ARM64
+            scheme: release
+            scheme_name: Release
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+          - platform: android
+            platform_name: Android
+            os: ubuntu-latest
+            arch: arm
+            arch_name: ARM
+            scheme: release
+            scheme_name: Release
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+    name:
+      Build ${{ matrix.scheme_name }} ${{ matrix.platform_name }} ${{
+      matrix.arch_name }}
+    runs-on: ${{ matrix.os }}
+    needs: [version_reader, create_release]
+    outputs:
+      artifact: ${{ steps.artifact.outputs.artifact }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run build script
+        run: ${{ matrix.command }}
+        env:
+          VERSION: ${{ needs.version_reader.outputs.version }}
+          SCHEME: ${{ matrix.scheme }}
+          PLATFORM: ${{ matrix.platform }}
+          ARCH: ${{ matrix.arch }}
+      - name: Upload Build
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/node.zip
+          asset_name:
+            node-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.scheme
+            }}-${{ needs.version_reader.outputs.version }}.zip
+          asset_content_type: application/zip
+
+  build_windows:
+    name: Build Release Windows x86-64
+    runs-on: windows-2019
+    needs: [version_reader, create_release]
+    outputs:
+      artifact: ${{ steps.artifact.outputs.artifact }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Run build script
+        shell: cmd
+        run: |
+          cd %GITHUB_WORKSPACE%
+          ./builders/node-windows.cmd ${{ needs.version_reader.outputs.version }}
+          cp %HOMEPATH%/node/node.zip %GITHUB_WORKSPACE%/node.zip
+        env:
+          VERSION: ${{ needs.version_reader.outputs.version }}
+          SCHEME: ${{ matrix.scheme }}
+          PLATFORM: ${{ matrix.platform }}
+          ARCH: ${{ matrix.arch }}
+      - name: Upload Build
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}\node.zip
+          asset_name:
+            node-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.scheme
+            }}-${{ needs.version_reader.outputs.version }}.zip
+          asset_content_type: application/zip
+
+  headers:
+    name: Headers and Documentation
+    runs-on: ubuntu-18.04
+    needs: [create_release, version_reader]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Generate documentation
+        run: |
+          cd $GITHUB_WORKSPACE
+          sh ./builders/node-docs.sh ${{ needs.version_reader.outputs.version }}
+      - name: Build Archives
+        run: |
+          cd ~/docs/html
+          zip -r ${{ github.workspace }}/docs.zip .
+          cd ~/node/node/include
+          zip -r ${{ github.workspace }}/headers.zip .
+          cp ~/node/node/LICENSE.node ${{ github.workspace }}/LICENSE.node
+      - name: Upload Documentation
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/docs.zip
+          asset_name: node-docs-${{ needs.version_reader.outputs.version }}.zip
+          asset_content_type: application/zip
+      - name: Upload Headers
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/headers.zip
+          asset_name:
+            node-headers-${{ needs.version_reader.outputs.version }}.zip
+          asset_content_type: application/zip
+      - name: Upload License
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/LICENSE
+          asset_name: LICENSE
+          asset_content_type: text/plain
+
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [version_reader]
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.version_reader.outputs.version }}
+          release_name: v${{ needs.version_reader.outputs.version }}
+          draft: true
+          prerelease: false
