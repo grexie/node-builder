@@ -4,8 +4,8 @@ set -e
 
 ROOTDIR=$(pwd)
 
-. ${pwd}/builders/arch/${ARCH}.sh
-. ${pwd}/builders/platform/${PLATFORM}.sh
+. ${ROOTDIR}/builders/arch/${ARCH}.sh
+. ${ROOTDIR}/builders/platform/${PLATFORM}.sh
 
 git config --global user.name "Node Builder"
 git config --global user.email "node@localhost"
