@@ -10,7 +10,8 @@ git config --global color.ui true
 
 mkdir -p ~/node
 
-git clone --depth 1 --branch ${NODE_VERSION} https://github.com/nodejs/node ~/node/node
+cd ~/node
+git clone --depth 1 --branch v${NODE_VERSION} https://github.com/nodejs/node
 cd ~/node/node
 
 ./configure --fully-static --enable-static
