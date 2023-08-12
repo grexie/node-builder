@@ -1,6 +1,7 @@
 #!/bin/bash -x
 
 ROOTDIR=$(pwd)
+NODE_VERSION=$(cat ${ROOTDOR}/NODE_VERSION)
 
 git config --global user.name "Node Builder"
 git config --global user.email "node@localhost"
