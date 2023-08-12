@@ -14,7 +14,7 @@ cd ~/node
 git clone --depth 1 --branch v${VERSION} https://github.com/nodejs/node
 cd ~/node/node
 
-./configure --fully-static --enable-static
+./configure --fully-static --enable-static --shared --dest-cpu ${ARCH} --dest-os ${PLATFORM}
 
 make -j8
 

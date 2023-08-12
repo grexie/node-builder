@@ -26,7 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: macos
+          - platform: mac
             platform_name: macOS
             os: macos-latest
             arch: arm64
@@ -50,7 +50,31 @@ jobs:
               cd $GITHUB_WORKSPACE
               bash ./builders/node.sh
               cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
-          - platform: macos
+          - platform: ios
+            platform_name: iOS
+            os: macos-latest
+            arch: arm64
+            arch_name: ARM64
+            scheme: release
+            scheme_name: Release
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+          - platform: ios
+            platform_name: iOS
+            os: macos-latest
+            arch: x64
+            arch_name: x86-64
+            scheme: release
+            scheme_name: Release
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+          - platform: mac
             platform_name: macOS
             os: macos-latest
             arch: arm64
@@ -170,51 +194,51 @@ jobs:
             }}-${{ needs.version_reader.outputs.version }}.zip
           asset_content_type: application/zip
 
-  headers:
-    name: Headers and Documentation
-    runs-on: ubuntu-18.04
-    needs: [create_release, version_reader]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Generate documentation
-        run: |
-          cd $GITHUB_WORKSPACE
-          sh ./builders/node-docs.sh ${{ needs.version_reader.outputs.version }}
-      - name: Build Archives
-        run: |
-          cd ~/docs/html
-          zip -r ${{ github.workspace }}/docs.zip .
-          cd ~/node/node/include
-          zip -r ${{ github.workspace }}/headers.zip .
-          cp ~/node/node/LICENSE.node ${{ github.workspace }}/LICENSE.node
-      - name: Upload Documentation
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/docs.zip
-          asset_name: node-docs-${{ needs.version_reader.outputs.version }}.zip
-          asset_content_type: application/zip
-      - name: Upload Headers
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/headers.zip
-          asset_name:
-            node-headers-${{ needs.version_reader.outputs.version }}.zip
-          asset_content_type: application/zip
-      - name: Upload License
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/LICENSE
-          asset_name: LICENSE
-          asset_content_type: text/plain
+  # headers:
+  #   name: Headers and Documentation
+  #   runs-on: ubuntu-18.04
+  #   needs: [create_release, version_reader]
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Generate documentation
+  #       run: |
+  #         cd $GITHUB_WORKSPACE
+  #         sh ./builders/node-docs.sh ${{ needs.version_reader.outputs.version }}
+  #     - name: Build Archives
+  #       run: |
+  #         cd ~/docs/html
+  #         zip -r ${{ github.workspace }}/docs.zip .
+  #         cd ~/node/node/include
+  #         zip -r ${{ github.workspace }}/headers.zip .
+  #         cp ~/node/node/LICENSE.node ${{ github.workspace }}/LICENSE.node
+  #     - name: Upload Documentation
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ needs.create_release.outputs.upload_url }}
+  #         asset_path: ${{ github.workspace }}/docs.zip
+  #         asset_name: node-docs-${{ needs.version_reader.outputs.version }}.zip
+  #         asset_content_type: application/zip
+  #     - name: Upload Headers
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ needs.create_release.outputs.upload_url }}
+  #         asset_path: ${{ github.workspace }}/headers.zip
+  #         asset_name:
+  #           node-headers-${{ needs.version_reader.outputs.version }}.zip
+  #         asset_content_type: application/zip
+  #     - name: Upload License
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ needs.create_release.outputs.upload_url }}
+  #         asset_path: ${{ github.workspace }}/LICENSE
+  #         asset_name: LICENSE
+  #         asset_content_type: text/plain
 
   create_release:
     name: Create Release
