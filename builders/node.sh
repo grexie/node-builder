@@ -1,5 +1,7 @@
 #!/bin/bash -x
 
+set -e
+
 ROOTDIR=$(pwd)
 
 git config --global user.name "Node Builder"
