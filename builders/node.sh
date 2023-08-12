@@ -1,7 +1,6 @@
 #!/bin/bash -x
 
 ROOTDIR=$(pwd)
-NODE_VERSION=$(cat ${ROOTDOR}/NODE_VERSION)
 
 git config --global user.name "Node Builder"
 git config --global user.email "node@localhost"
@@ -12,7 +11,7 @@ git config --global color.ui true
 mkdir -p ~/node
 
 cd ~/node
-git clone --depth 1 --branch v${NODE_VERSION} https://github.com/nodejs/node
+git clone --depth 1 --branch v${VERSION} https://github.com/nodejs/node
 cd ~/node/node
 
 ./configure --fully-static --enable-static
