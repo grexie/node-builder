@@ -4,6 +4,9 @@ set -e
 
 ROOTDIR=$(pwd)
 
+. ${pwd}/builders/arch/${ARCH}.sh
+. ${pwd}/builders/platform/${PLATFORM}.sh
+
 git config --global user.name "Node Builder"
 git config --global user.email "node@localhost"
 git config --global core.autocrlf false
@@ -16,10 +19,13 @@ cd ~/node
 git clone --depth 1 --branch v${VERSION} https://github.com/nodejs/node
 cd ~/node/node
 
+platform_deps
+arch_deps
+
 ./configure --fully-static --enable-static --shared --dest-cpu ${ARCH} --dest-os ${PLATFORM}
 
 make -j8
 
 cd out/
-zip -j -r  ~/node/node.zip .
+zip -r  ~/node/node.zip .
 
