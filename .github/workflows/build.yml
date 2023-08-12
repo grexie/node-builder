@@ -38,49 +38,37 @@ jobs:
               cd $GITHUB_WORKSPACE
               bash ./builders/node.sh
               cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
-          - platform: macos
-            platform_name: macOS
-            os: macos-latest
-            arch: x64
-            arch_name: x86-64
-            scheme: release
-            scheme_name: Release
-            shell_cmd: bash
-            command: |
-              cd $GITHUB_WORKSPACE
-              bash ./builders/node.sh
-              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
-          - platform: ios
-            platform_name: iOS
-            os: macos-latest
-            arch: arm64
-            arch_name: ARM64
-            scheme: release
-            scheme_name: Release
-            shell_cmd: bash
-            command: |
-              cd $GITHUB_WORKSPACE
-              bash ./builders/node.sh
-              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
-          - platform: ios
-            platform_name: iOS
-            os: macos-latest
-            arch: x64
-            arch_name: x86-64
-            scheme: release
-            scheme_name: Release
-            shell_cmd: bash
-            command: |
-              cd $GITHUB_WORKSPACE
-              bash ./builders/node.sh
-              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
           - platform: mac
             platform_name: macOS
             os: macos-latest
+            arch: x64
+            arch_name: x86-64
+            scheme: release
+            scheme_name: Release
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+          - platform: ios
+            platform_name: iOS
+            os: macos-latest
             arch: arm64
             arch_name: ARM64
-            scheme: debug
-            scheme_name: Debug
+            scheme: release
+            scheme_name: Release
+            shell_cmd: bash
+            command: |
+              cd $GITHUB_WORKSPACE
+              bash ./builders/node.sh
+              cp ~/node/node.zip $GITHUB_WORKSPACE/node.zip
+          - platform: ios
+            platform_name: iOS
+            os: macos-latest
+            arch: x64
+            arch_name: x86-64
+            scheme: release
+            scheme_name: Release
             shell_cmd: bash
             command: |
               cd $GITHUB_WORKSPACE
