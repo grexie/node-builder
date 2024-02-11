@@ -14,7 +14,8 @@ cd node
 git clone --depth 1 --branch v%VERSION% https://github.com/nodejs/node
 cd node
 
-
+choco install boxstarter
+boxstarter https://raw.githubusercontent.com/nodejs/node/HEAD/tools/bootstrap/windows_boxstarter -DisableReboots
 vcbuild dll
 
 cd out/Release
