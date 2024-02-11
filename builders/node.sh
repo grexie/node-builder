@@ -22,7 +22,7 @@ cd ~/node/node
 platform_deps
 arch_deps
 
-./configure --shared --dest-cpu ${ARCH} --dest-os ${PLATFORM} --cross-compiling --without-intl --without-npm
+./configure --shared --dest-cpu ${ARCH} --dest-os ${PLATFORM} --cross-compiling --without-npm
 
 make -j8
 
