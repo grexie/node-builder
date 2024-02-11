@@ -15,9 +15,9 @@ git clone --depth 1 --branch v%VERSION% https://github.com/nodejs/node
 cd node
 
 
-./configure --shared --without-npm
+configure --shared --without-npm
 
 make -j8
 
 cd out/Release
-call 7z a %HOMEPATH%\node\node.zip -r *
+7z a %HOMEPATH%\node\node.zip -r *
