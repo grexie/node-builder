@@ -152,7 +152,7 @@ jobs:
 
   build_windows:
     name: Build Release Windows x86-64
-    runs-on: windows-2019
+    runs-on: windows-2022
     needs: [version_reader, create_release]
     outputs:
       artifact: ${{ steps.artifact.outputs.artifact }}
