@@ -19,10 +19,12 @@ cd ~/node
 git clone --depth 1 --branch v${VERSION} https://github.com/nodejs/node
 cd ~/node/node
 
+export NODE_CONFIGURE_FLAGS=""
+
 platform_deps
 arch_deps
 
-./configure --shared --dest-cpu ${ARCH} --dest-os ${PLATFORM} --cross-compiling --without-npm
+./configure --shared --dest-cpu ${ARCH} --dest-os ${PLATFORM} --cross-compiling --without-npm ${NODE_CONFIGURE_FLAGS}
 
 make -j8
 
