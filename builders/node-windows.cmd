@@ -11,7 +11,7 @@ git config --global color.ui true
 mkdir node
 cd node
 
-git clone --depth 1 --branch v${VERSION} https://github.com/nodejs/node
+git clone --depth 1 --branch v%VERSION% https://github.com/nodejs/node
 cd node
 
 
