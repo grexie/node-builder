@@ -20,4 +20,5 @@ powershell "Import-Module Boxstarter.Chocolatey; Install-BoxstarterPackage https
 vcbuild dll
 
 cd out/Release
-7z a %HOMEPATH%\node\node.zip -r *
+del .deps obj.host obj.target obj
+call 7z a %HOMEPATH%\node\node.zip -r *
