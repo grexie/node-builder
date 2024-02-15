@@ -162,9 +162,9 @@ jobs:
       - name: Run build script
         shell: cmd
         run: |
-          cd %GITHUB_WORKSPACE%
+          cd ${{ github.workspace }}
           ./builders/node-windows.cmd ${{ needs.version_reader.outputs.version }}
-          cp %HOMEPATH%/node/node.zip %GITHUB_WORKSPACE%/node.zip
+          cp %HOMEPATH%/node/node.zip ${{ github.workspace }}/node.zip
         env:
           VERSION: ${{ needs.version_reader.outputs.version }}
           SCHEME: ${{ matrix.scheme }}
