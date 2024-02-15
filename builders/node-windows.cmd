@@ -21,4 +21,4 @@ vcbuild dll
 
 cd out/Release
 del /s /q .deps obj.host obj.target obj
-call 7z a %HOMEPATH%\node.zip -r *
+call 7z a %HOMEPATH%\node\node.zip -r *
