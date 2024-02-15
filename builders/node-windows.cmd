@@ -14,6 +14,7 @@ cd node
 git clone --depth 1 --branch v%VERSION% https://github.com/nodejs/node
 cd node
 
+choco install 7zip.install --pre
 choco install boxstarter
 set PSMODULEPATH=%PSMODULEPATH%;C:\ProgramData\Boxstarter
 powershell "Import-Module Boxstarter.Chocolatey; Install-BoxstarterPackage https://raw.githubusercontent.com/nodejs/node/HEAD/tools/bootstrap/windows_boxstarter -DisableReboots"
