@@ -167,9 +167,9 @@ jobs:
           cp %HOMEPATH%/node/node.zip ${{ github.workspace }}/node.zip
         env:
           VERSION: ${{ needs.version_reader.outputs.version }}
-          SCHEME: ${{ matrix.scheme }}
-          PLATFORM: ${{ matrix.platform }}
-          ARCH: ${{ matrix.arch }}
+          SCHEME: release
+          PLATFORM: windows
+          ARCH: x64
       - name: Upload Build
         uses: actions/upload-release-asset@v1
         env:
