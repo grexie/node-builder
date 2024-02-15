@@ -178,8 +178,7 @@ jobs:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
           asset_path: ${{ github.workspace }}\node.zip
           asset_name:
-            node-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.scheme
-            }}-${{ needs.version_reader.outputs.version }}.zip
+            node-windows-x64-release-${{ needs.version_reader.outputs.version }}.zip
           asset_content_type: application/zip
 
   # headers:
