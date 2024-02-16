@@ -162,6 +162,10 @@ jobs:
       - name: Run build script
         shell: cmd
         run: |
+          choco install 7zip.install --pre
+      - name: Run build script
+        shell: cmd
+        run: |
           cd ${{ github.workspace }}
           ./builders/node-windows.cmd ${{ needs.version_reader.outputs.version }}
           cp %HOMEPATH%/node/node.zip ${{ github.workspace }}/node.zip
