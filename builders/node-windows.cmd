@@ -17,8 +17,9 @@ cd node
 choco install boxstarter
 set PSMODULEPATH=%PSMODULEPATH%;C:\ProgramData\Boxstarter
 powershell "Import-Module Boxstarter.Chocolatey; Install-BoxstarterPackage https://raw.githubusercontent.com/nodejs/node/HEAD/tools/bootstrap/windows_boxstarter -DisableReboots"
-vcbuild dll
+call vcbuild dll
 
 cd out\Release
-rmdir /s /q libs
+rmdir /s /q lib obj
+del /s /q *.pdb *.lib *.ilk *.exp
 call "%PROGRAMFILES%\7-Zip\7z" a %HOMEPATH%\node\node.zip -r *
