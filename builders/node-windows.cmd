@@ -19,6 +19,6 @@ set PSMODULEPATH=%PSMODULEPATH%;C:\ProgramData\Boxstarter
 powershell "Import-Module Boxstarter.Chocolatey; Install-BoxstarterPackage https://raw.githubusercontent.com/nodejs/node/HEAD/tools/bootstrap/windows_boxstarter -DisableReboots"
 vcbuild dll
 
-cd out/Release
-del /s /q libs .deps obj.host obj.target obj
+cd out\Release
+rmdir /s /q libs
 call "%PROGRAMFILES%\7-Zip\7z" a %HOMEPATH%\node\node.zip -r *
