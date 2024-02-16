@@ -29,6 +29,6 @@ arch_deps
 make -j8
 
 cd out/Release
-rm -Rf .deps obj.host obj.target obj
+rm -Rf *.a .deps obj.host obj.target obj
 zip -r  ~/node/node.zip .
 
