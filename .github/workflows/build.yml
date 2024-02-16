@@ -163,6 +163,8 @@ jobs:
         shell: cmd
         run: |
           choco install 7zip.install --pre
+          dir "%PROGRAMFILES%"
+          dir "%PROGRAMFILES%\7-Zip"
       - name: Run build script
         shell: cmd
         run: |
