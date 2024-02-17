@@ -21,5 +21,4 @@ call vcbuild dll
 
 cd out\Release
 rmdir /s /q lib obj
-del /s /q *.pdb *.lib *.ilk *.exp
 call "%PROGRAMFILES%\7-Zip\7z" a %HOMEPATH%\node\node.zip -r *
