@@ -150,7 +150,81 @@ jobs:
             }}-${{ needs.version_reader.outputs.version }}.zip
           asset_content_type: application/zip
 
-  build_windows:
+  build_windows_x86:
+    name: Build Release Windows x86
+    runs-on: windows-2022
+    needs: [version_reader, create_release]
+    outputs:
+      artifact: ${{ steps.artifact.outputs.artifact }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Run build script
+        shell: cmd
+        run: |
+          choco install 7zip.install --pre
+          dir "%PROGRAMFILES%"
+          dir "%PROGRAMFILES%\7-Zip"
+      - name: Run build script
+        shell: cmd
+        run: |
+          cd ${{ github.workspace }}
+          call ./builders/node-windows.cmd ${{ needs.version_reader.outputs.version }}
+          cp %HOMEPATH%/node/node.zip ${{ github.workspace }}/node.zip
+        env:
+          VERSION: ${{ needs.version_reader.outputs.version }}
+          SCHEME: release
+          PLATFORM: windows
+          ARCH: x86
+      - name: Upload Build
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}\node.zip
+          asset_name:
+            node-windows-x86-release-${{ needs.version_reader.outputs.version }}.zip
+          asset_content_type: application/zip
+          
+  build_windows_arm64:
+    name: Build Release Windows ARM64
+    runs-on: windows-2022
+    needs: [version_reader, create_release]
+    outputs:
+      artifact: ${{ steps.artifact.outputs.artifact }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Run build script
+        shell: cmd
+        run: |
+          choco install 7zip.install --pre
+          dir "%PROGRAMFILES%"
+          dir "%PROGRAMFILES%\7-Zip"
+      - name: Run build script
+        shell: cmd
+        run: |
+          cd ${{ github.workspace }}
+          call ./builders/node-windows.cmd ${{ needs.version_reader.outputs.version }}
+          cp %HOMEPATH%/node/node.zip ${{ github.workspace }}/node.zip
+        env:
+          VERSION: ${{ needs.version_reader.outputs.version }}
+          SCHEME: release
+          PLATFORM: windows
+          ARCH: arm64
+      - name: Upload Build
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}\node.zip
+          asset_name:
+            node-windows-arm64-release-${{ needs.version_reader.outputs.version }}.zip
+          asset_content_type: application/zip
+          
+  build_windows_x64:
     name: Build Release Windows x86-64
     runs-on: windows-2022
     needs: [version_reader, create_release]
