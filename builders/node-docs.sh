@@ -17,4 +17,6 @@ cd ~/node
 git clone --depth 1 --branch v${VERSION} https://github.com/nodejs/node
 cd ~/node/node
 
+./configure
+
 make doc
