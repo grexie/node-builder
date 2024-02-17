@@ -169,7 +169,7 @@ jobs:
         shell: cmd
         run: |
           cd ${{ github.workspace }}
-          ./builders/node-windows.cmd ${{ needs.version_reader.outputs.version }}
+          call ./builders/node-windows.cmd ${{ needs.version_reader.outputs.version }}
           cp %HOMEPATH%/node/node.zip ${{ github.workspace }}/node.zip
         env:
           VERSION: ${{ needs.version_reader.outputs.version }}
