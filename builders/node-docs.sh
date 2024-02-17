@@ -2,6 +2,7 @@
 
 set -e
 
+VERSION=$1
 ROOTDIR=$(pwd)
 
 git config --global user.name "Node Builder"
