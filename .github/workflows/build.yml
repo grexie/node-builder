@@ -189,7 +189,7 @@ jobs:
 
   headers:
     name: Headers and Documentation
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     needs: [create_release, version_reader]
     steps:
       - uses: actions/checkout@v2
